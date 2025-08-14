@@ -1,15 +1,25 @@
-# Set a to 12
-A = "12"
-# Set b to 9
-B = "9"
-# If a > b Then
-if "a > b":
-    print ("a is greater than b")
-# Display "a is bigger" Else Display "a is smaller or equal"
-    print ("a is smaller or equal")
+
+import add
+import show
+import update
+import delete
+
+add_task_response = add.add_task("sleep")
+print(add_task_response)
+
+
+show_tasks_response = show.show_task()
+print(show_tasks_response)
+
+
+update_task_response = update.update_task("sleep", "Wake up")
+print(update_task_response)
+
+delete_task_response = delete.delete_task("Wake up")
+print(delete_task_response)
 
 
 
 
 
-    
+
