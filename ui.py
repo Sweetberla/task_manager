@@ -3,6 +3,13 @@ from tkinter import messagebox
 from functools import partial
 import commands
 
+def handle_update(id,title,app):
+   if not title:
+      messagebox.showerror(title="Edit Task", message="Cannot update with empty task!",parent=app )
+   else:
+      commands.update_task(id, {"title": title})
+      show_all_task_frame(app)
+
 def handle_delete(id, app):
    commands.delete_task(id)
    show_all_task_frame(app)
@@ -16,6 +23,29 @@ def submit_task(title ,app):
      commands.save_task({"title": title})
     show_all_task_frame(app)
 
+
+def show_edit_task_frame(task,app):
+   frame = tk.Frame(master=app)
+   frame.grid(row=0, column=0, sticky="nsew", padx=10 , pady=10)
+
+   label = tk.Label(master=frame, text=f"Edit task:{task["title"]} ")
+   label.grid(row=0, column=0, columnspan=2)
+
+   # Add an entry widget and show the old title
+   entry =tk.Entry(master=frame)
+   entry.insert(0 ,task["title"])
+   entry.grid(column=0 ,row=1 ,pady=(5,10) ,columnspan=2,sticky="ew")
+
+   # Add a button with text update for saving the changes
+   update_btn = tk.Button(master=frame,text="Update", command=lambda: handle_update(task["_id"] , entry.get(),app))
+   update_btn.grid(column=0, row=2, padx=5, pady=5),
+
+   #Add a button with the text Back / Cancel for removing the frame
+   cancel_btn = tk.Button(master=frame,text="Back",command=lambda:frame.destroy())
+   cancel_btn.grid(column=1, row=2,padx=5,pady=5)
+
+   frame.tkraise
+ 
 
 
 
@@ -43,7 +73,7 @@ def show_all_task_frame(app):
         checkbtn.grid(row=tasks.index(task),column=0)
 
 
-        edit_btn = tk.Button(master=frame,text="Edit")
+        edit_btn = tk.Button(master=frame,text="Edit" ,command=partial(show_edit_task_frame,task,app))
         edit_btn.grid(row=tasks.index(task),column=1)
 
 
@@ -54,5 +84,9 @@ def show_all_task_frame(app):
 
     add_btn = tk.Button(master=frame, text="Add Task" , command=lambda: show_add_task_frame(app))
     add_btn.grid(row=len(tasks) + 1 ,column=0)
+
+    entry_widget = tk.Button(master=frame, text="Edit" , command=lambda: entry_widget(task))
+    entry_widget.grid(row=tasks.index(task), column=2)
+
     frame.tkraise()  
 
